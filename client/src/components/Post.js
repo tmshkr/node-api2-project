@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardText, CardBody, CardTitle, Button } from "reactstrap";
+import { Card, CardText, CardBody, Button } from "reactstrap";
 import "./Post.scss";
 
 function Post(props) {
