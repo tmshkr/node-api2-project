@@ -6,7 +6,7 @@ import {
   Switch,
 } from "react-router-dom";
 
-import Post from "./components/Post";
+import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
 import axios from "./utils/axios";
 import "./App.scss";
@@ -25,9 +25,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/posts">
-            {posts.map((p) => (
-              <Post key={p.id} post={p} getPosts={getPosts} />
-            ))}
+            <PostList posts={posts} getPosts={getPosts} />
           </Route>
           <Route exact path="/posts/new">
             <PostForm getPosts={getPosts} />
