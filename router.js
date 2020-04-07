@@ -123,6 +123,35 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {});
+router.put("/:id", (req, res) => {
+  const post_id = Number(req.params.id);
+  const { title, contents } = req.body;
+
+  if (!(title && contents))
+    return res.status(400).json({
+      errorMessage: "Please provide title and contents for the post.",
+    });
+
+  db.findById(post_id)
+    .then((post) => {
+      if (!post.length)
+        throw new HTTPError(
+          404,
+          "The post with the specified ID does not exist."
+        );
+    })
+    .then(() => {
+      db.update(post_id, { title, contents }).then((post) => res.json(post));
+    })
+    .catch((err) => {
+      if (!err.code) {
+        console.error(err);
+        return res
+          .status(500)
+          .json({ error: "The post information could not be modified." });
+      }
+      res.status(err.code).json({ error: err.message });
+    });
+});
 
 module.exports = router;
