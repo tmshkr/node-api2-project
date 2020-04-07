@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("./data/db");
+const HTTPError = require("./HTTPError");
 
 router.post("/", (req, res) => {
   const { title, contents } = req.body;
@@ -73,7 +74,31 @@ router.get("/:id", (req, res) => {
         .json({ error: "The post information could not be retrieved." });
     });
 });
-router.get("/:id/comments", (req, res) => {});
+
+router.get("/:id/comments", (req, res) => {
+  const post_id = Number(req.params.id);
+
+  db.findById(post_id)
+    .then((post) => {
+      if (!post.length)
+        throw new HTTPError(
+          404,
+          "The post with the specified ID does not exist."
+        );
+    })
+    .then(() => {
+      db.findPostComments(post_id).then((comments) => res.json(comments));
+    })
+    .catch((err) => {
+      console.log(err);
+      if (!(err.code && err.message)) {
+        return res
+          .status(500)
+          .json({ error: "The comments information could not be retrieved." });
+      }
+      res.status(err.code).json({ error: err.message });
+    });
+});
 
 router.delete("/:id", (req, res) => {});
 
