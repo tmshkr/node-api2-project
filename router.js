@@ -85,8 +85,6 @@ router.get("/:id/comments", (req, res) => {
           404,
           "The post with the specified ID does not exist."
         );
-    })
-    .then(() => {
       db.findPostComments(post_id).then((comments) => res.json(comments));
     })
     .catch((err) => {
@@ -110,8 +108,6 @@ router.delete("/:id", (req, res) => {
           404,
           "The post with the specified ID does not exist."
         );
-    })
-    .then(() => {
       db.remove(post_id).then(() => res.status(204).send());
     })
     .catch((err) => {
@@ -139,8 +135,6 @@ router.put("/:id", (req, res) => {
           404,
           "The post with the specified ID does not exist."
         );
-    })
-    .then(() => {
       db.update(post_id, { title, contents }).then((post) => res.json(post));
     })
     .catch((err) => {
